@@ -43,6 +43,9 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 5
+
+      imagePullSecrets:
+      - name: acr-credentials
 ---
 apiVersion: v1
 kind: Service
@@ -51,7 +54,7 @@ metadata:
   labels:
     app: backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: backend
   ports:

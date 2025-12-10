@@ -18,16 +18,25 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
-            steps {
-                echo '🔍 Running SonarQube analysis...'
-                script {
-                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
+    steps {
+        echo 'Running SonarQube analysis...'
+        script {
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('SonarQube') {   // Uses the URL and token from Jenkins config
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                      -Dsonar.projectKey=cicd-demo-app \
+                      -Dsonar.projectName="CI/CD Demo Application" \
+                      -Dsonar.projectVersion=${BUILD_NUMBER} \
+                      -Dsonar.sources=backend,frontend \
+                      -Dsonar.login=${env.SONAR_AUTH_TOKEN} \
+                      -Dsonar.qualitygate.wait=false
+                """
             }
         }
+    }
+}
+
         
         stage('Build Docker Images') {
             parallel {

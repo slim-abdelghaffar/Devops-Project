@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Pipeline Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Enterprise CI/CD Pipeline</h1>
+            <p class="subtitle">Automated Deployment Demo</p>
+        </header>
+
+        <div class="pipeline-flow">
+            <div class="pipeline-step">
+                <div class="step-icon">📝</div>
+                <div class="step-name">GitHub</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">⚙️</div>
+                <div class="step-name">Jenkins</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">🔍</div>
+                <div class="step-name">SonarQube</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">🐳</div>
+                <div class="step-name">Docker</div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="pipeline-step">
+                <div class="step-icon">☁️</div>
+                <div class="step-name">Azure</div>
+            </div>
+        </div>
+
+        <div class="status-card" id="statusCard">
+            <h2>Deployment Status</h2>
+            <div class="status-indicator">
+                <span class="pulse"></span>
+                <span id="statusText">Checking...</span>
+            </div>
+            <div class="deployment-info" id="deploymentInfo">
+                <p>Connecting to backend...</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="checkBackend()">
+                🔄 Refresh Status
+            </button>
+            <button class="btn btn-secondary" onclick="getVersion()">
+                📋 Version Info
+            </button>
+        </div>
+
+        <div class="response-container" id="responseContainer">
+            <h3>API Response</h3>
+            <pre id="apiResponse">Click a button to test the API...</pre>
+        </div>
+
+        <footer>
+            <p>Deployed via: Jenkins + SonarQube + Docker + ACR + AKS</p>
+            <p id="timestamp"></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

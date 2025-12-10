@@ -18,16 +18,30 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
-            steps {
-                echo '🔍 Running SonarQube analysis...'
-                script {
-                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
+    steps {
+        echo 'Running SonarQube analysis...'
+        script {
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('SonarQube') {                // this injects SONAR_HOST_URL and SONAR_AUTH_TOKEN automatically
+                sh """
+                ${scannerHome}/bin/sonar-scanner \
+                  -Dsonar.projectKey=cicd-demo-app \
+                  -Dsonar.projectName="CI/CD Demo Application" \
+                  -Dsonar.projectVersion=${BUILD_NUMBER} \
+                  -Dsonar.sources=backend,frontend
+            """
+            }
+
+            // Optional but very recommended: fail the pipeline if Quality Gate is red
+            timeout(time: 5, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
                 }
             }
         }
+    }
+}
         
         stage('Build Docker Images') {
             parallel {
